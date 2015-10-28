@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>木木香烤吧管理系统</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>大靖木木香烤吧用户管理界面</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='webfonts.css')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript">
+      addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
+    </script>
   </head>
   <body>
-    <p>欢迎访问大靖木木香烤吧</p>
+    <div class="main">
+      <div class="login-form">
+        <h1>管理员登录</h1>
+        <form>
+          <input type="text" class="text" value="用户名" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '用户名';}" >
+          <input type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}">
+          <div class="submit">
+            <input type="submit" onclick="myFunction()" value="登陆" >
+          </div>
+        </form>
+      </div>
+    </div>
   </body>
 </html>
