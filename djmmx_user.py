@@ -17,7 +17,7 @@ def connect_db():
         pw = sae.const.MYSQL_PASS
     except ImportError:
         pass
-    return MySQLdb.connect(host=host,user=user,passwd=pw,db=db)
+    return MySQLdb.connect(host=host,port=port,user=user,passwd=pw,db=db)
 
 def get_db():
     if not hasattr(g, 'db'):
