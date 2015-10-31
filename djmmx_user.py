@@ -1,6 +1,9 @@
 #-*- coding: UTF-8 -*- 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import MySQLdb
+import sys
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
 
 def connect_db():
     host = 'localhost'
@@ -17,7 +20,7 @@ def connect_db():
         pw = sae.const.MYSQL_PASS
     except ImportError:
         pass
-    return MySQLdb.connect(host=host,port=port,user=user,passwd=pw,db=db)
+    return MySQLdb.connect(host=host,port=port,user=user,passwd=pw,db=db,charset='utf8')
 
 def get_db():
     if not hasattr(g, 'db'):
