@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+  <div class="login-form">
+    <h1>管理员登录</h1>
+    <form action="{{ url_for('login') }}" method="post">
+      <dl>
+        <dd><input type="text" name="username" value="用户名" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '用户名';}" >
+        <dd><input type="password" name="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}">
+        <dd><input type="submit" value="登陆">
+      </dl>
+    </form>
+  </div>
+{% endblock %}

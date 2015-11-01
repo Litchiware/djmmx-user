@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class="table-title">
+    <h3 style="text-align: center;">用户信息列表</h3>
+  </div>
+  <table class="rwd-table">
+    <thead>
+      <tr>
+        <th class="wide-space">微信号</th>
+        <th class="narrow-space">姓名</th>
+        <th class="narrow-space">转发优惠</th>
+        <th class="narrow-space">积分</th>
+      </tr>
+    </thead>
+    <tbody class="table-hover">
+      {% for user in users %}
+      <tr>
+        <td class="wide-space">{{ user[0] }}</td>
+        <td class="narrow-space">{{ user[1].decode('utf-8') }}</td>
+        <td class="narrow-space">{{ '已用' if user[2]==0 else '可用' }}<a href="#" class="toggle-wx-discount">切换</a></td>
+        <td class="narrow-space">{{ user[3] }}<a href="#" class="update-credit">增加</a><a href="#" class="update-credit">减少</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="hidden-form">
+    <form method="post"><input type='text' name="wx_discount"></form>
+  </div>
+  <div class="dialog">
+    <form method="post">
+      <label></label>
+      <input type="text" id="name" name="delt_credit">
+      <input type="hidden" name="is_positive">
+      <div align="center">
+        <input type="submit" value="确定">
+      </div>
+    </form>
+  </div>
+  <a href="{{ url_for('add_user') }}" class="a-button">新增客户</a>
+  <div class="js-menu-screen menu-screen"></div>
+{% endblock %}
