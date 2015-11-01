@@ -9,6 +9,7 @@
         <dd><input type="text" name="wx_id" value="微信号" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '微信号';}" >
         <dd><input type="text" name="phone_number" value="手机号" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '手机号';}">
         <dd><input type="submit" value="添加">
+        <a href="{{ url_for('show_users') }}">返回</a>
       </dl>
     </form>
   </div>

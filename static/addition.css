@@ -47,3 +47,7 @@
   opacity: .4;
   visibility: visible;
 }
+.rwd-table a:link, .rwd-table a:visited, .rwd-table a:hover, .rwd-table a:active{
+  margin-left: 5px;
+  color: #DA81F5;
+}
