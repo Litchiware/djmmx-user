@@ -6,8 +6,9 @@
   <table class="rwd-table">
     <thead>
       <tr>
-        <th class="wide-space">微信号</th>
         <th class="narrow-space">姓名</th>
+        <th class="wide-space">微信号</th>
+        <th class="narrow-space">手机号</th>
         <th class="narrow-space">转发优惠</th>
         <th class="narrow-space">积分</th>
       </tr>
@@ -15,8 +16,9 @@
     <tbody class="table-hover">
       {% for user in users %}
       <tr>
-        <td class="wide-space">{{ user[0] }}</td>
         <td class="narrow-space">{{ user[1].decode('utf-8') }}</td>
+        <td class="wide-space">{{ user[0] }}</td>
+        <td class="narrow-space">{{ user[4].decode('utf-8') }}</td>
         <td class="narrow-space">{{ '已用' if user[2]==0 else '可用' }}<a href="#" class="toggle-wx-discount">切换</a></td>
         <td class="narrow-space">{{ user[3] }}<a href="#" class="update-credit">增加</a><a href="#" class="update-credit">减少</a></td>
       </tr>

@@ -57,7 +57,7 @@ def show_users():
         return redirect(url_for('login'))
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('select wx_id, name, wx_discount, credit from users order by id desc')
+    cursor.execute('select wx_id, name, wx_discount, credit, phone_number from users order by id desc')
     users = cursor.fetchall()
     return render_template('show_users.html', users=users)
 
@@ -78,10 +78,12 @@ def add_user():
             error = u'请输入微信号！'
         elif request.form['name'] == u'姓名':
             error = u'请输入客户姓名！'
+        elif request.form['phone_number'] == u'手机号':
+            error = u'请输入客户手机号！'
         else:
             db = get_db()
             cursor = db.cursor()
-            cursor.execute("insert into users(wx_id, name) values ('%s', '%s')" %(request.form['wx_id'].encode('utf-8'), request.form['name'].encode('utf-8')))
+            cursor.execute("insert into users(wx_id, name, phone_number) values ('%s', '%s', '%s')" %(request.form['wx_id'].encode('utf-8'), request.form['name'].encode('utf-8'), request.form['phone_number'].encode('utf-8')))
             db.commit()
             flash(u'用户添加成功！')
             return redirect(url_for('show_users'))

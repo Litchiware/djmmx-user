@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('.dialog').removeClass('is-visible');
   });
   $(".toggle-wx-discount").click(function(){
-    var wx_id = $(this).parents("tr").children("td:first").text();
+    var wx_id = $(this).parents("tr").children("td").eq(1).text();
     $(".hidden-form input[name='wx_discount']").attr('value', 'auto');
     $(".hidden-form form").attr("action", "/update/" + wx_id).submit();
   });
@@ -16,7 +16,7 @@ $(document).ready(function(){
     var td$ = $(this).parent();
     var offset = td$.offset();
     offset.left = offset.left + td$.width();
-    var wx_id = $(this).parents("tr").children("td:first").text();
+    var wx_id = $(this).parents("tr").children("td").eq(1).text();
     $(".dialog").offset(offset)
       .data({'wx_id': wx_id, 'is_positive': $(this).text() == "增加"});
   });
