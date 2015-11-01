@@ -51,3 +51,49 @@
   margin-left: 5px;
   color: #DA81F5;
 }
+.find-users {
+  height: 30px;
+}
+.find-users button{
+  border-radius: 3px;
+  padding: 3px 6px;
+  border: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  background-color: #F7F2E0; 
+  border-style: solid;
+  border-width: 1px;
+  border-color: #DA81F5;
+}
+.find-users button:hover{
+  cursor: pointer;
+  cursor: hand;
+}
+.find-users button:focus{
+  outline : none;
+  background-color: #F5A9A9; 
+}
+.find-users input[type=text] {
+  margin-right: 20px;
+  padding: 5px;
+  border-radius: 3px;
+  border: none;
+  margin-left: 10px;
+  display: inline-block;
+  background-color: #F7F8E0; 
+  font-size: 14px;
+  letter-spacing: 1px;
+  width: 100px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #DA81F5;
+}
+.find-users input[type=text]:focus{
+  outline : none;
+}
+.table-title a{
+  display: block;
+  margin: auto;
+  text-align: center;
+  font-size: 20px;
+}

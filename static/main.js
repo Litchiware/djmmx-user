@@ -1,4 +1,15 @@
 $(document).ready(function(){
+  $(".find-users button").click(function(){
+    var target_name = $(this).next().val();
+    var trs$ = $(".rwd-table tbody tr");
+    trs$.css("display", "table-row");
+    trs$.each(function(){
+      var username = $(this).children(":first").text();
+      if (username.indexOf(target_name) == -1){
+        $(this).css("display", "none");
+      }
+    });
+  });
   $("div.js-menu-screen.menu-screen").click(function(){
     $(this).removeClass('is-visible');
     $('.dialog').removeClass('is-visible');

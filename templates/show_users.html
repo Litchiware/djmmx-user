@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
   <div class="table-title">
-    <h3 style="text-align: center;">用户信息列表</h3>
+    <a href="{{ url_for('show_users') }}">客户信息列表</a>
+  </div>
+  <div align="right" class="find-users">
+    <button type="button">查找</button>
+    <input type="text"/>
   </div>
   <table class="rwd-table">
     <thead>
