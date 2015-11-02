@@ -347,7 +347,7 @@ form input[type="submit"]:hover{
 @media (max-width:1440px){
 	.login-form {
 	width:30%;
-	margin: 11% auto 4% auto;
+	margin: 8% auto 4% auto;
 	}
 	.main h1 {
 	padding-top: 23%;

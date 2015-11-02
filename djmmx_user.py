@@ -1,5 +1,6 @@
 #-*- coding: UTF-8 -*- 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+import re
 import MySQLdb
 import sys
 reload(sys)
@@ -74,12 +75,24 @@ def add_user():
         abort(401)
     error = None
     if request.method == 'POST':
-        if request.form['wx_id'] == u'微信号':
+        wx_id = request.form['wx_id']
+        username = request.form['name']
+        phone_number = request.form['phone_number']
+        wx_id_patt = re.compile(r'^[0-9a-zA-Z_-]+$')
+        username_patt = re.compile(ur"(^[\u4e00-\u9fa5]{2,}$)")
+        phone_number_patt = re.compile(ur"^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$")
+        if wx_id == u'微信号':
             error = u'请输入微信号！'
-        elif request.form['name'] == u'姓名':
+        elif username == u'姓名':
             error = u'请输入客户姓名！'
-        elif request.form['phone_number'] == u'手机号':
+        elif phone_number == u'手机号':
             error = u'请输入客户手机号！'
+        elif not wx_id_patt.match(wx_id):
+            error = u'微信号格式非法！'
+        elif not username_patt.match(username):
+            error = u'姓名必须为汉字！'
+        elif not phone_number_patt.match(phone_number):
+            error = u'手机号码格式非法！'
         else:
             db = get_db()
             cursor = db.cursor()
@@ -97,13 +110,18 @@ def update_user(wx_id):
             cursor = db.cursor()
             cursor.execute("update users set wx_discount=mod(wx_discount+1,2) where wx_id=('%s')" %(wx_id.decode('utf-8')))
             db.commit()
-            flash(u'转发优惠！')
+            flash(u'优惠信息已更新！')
             return redirect(url_for('show_users'))
         if 'delt_credit' in request.form:
+            operand = request.form['delt_credit']
+            patt = re.compile(r'^[1-9][0-9]*$')
+            if not patt.match(operand):
+                flash(u'请输入一个正整数！')
+                return redirect(url_for('show_users'))
+            operator = '+' if request.form['is_positive'] == u'true' else '-'
             db = get_db()
             cursor = db.cursor()
-            operator = '+' if request.form['is_positive'] == u'true' else '-'
-            cursor.execute("update users set credit=credit%s%d where wx_id=('%s')" %(operator, int(request.form.get('delt_credit')), wx_id.decode('utf-8')))
+            cursor.execute("update users set credit=credit%s%d where wx_id=('%s')" %(operator, int(operand), wx_id.decode('utf-8')))
             db.commit()
             flash(u'积分已更新！')
             return redirect(url_for('show_users'))

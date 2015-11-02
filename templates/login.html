@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+  {% if error %}<p class="error"><strong>错误：</strong> {{ error }}{% endif %}
   <div class="login-form">
     <h1>管理员登录</h1>
     <form action="{{ url_for('login') }}" method="post">
