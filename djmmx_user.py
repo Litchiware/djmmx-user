@@ -32,17 +32,16 @@ def get_db():
 # DATABASE=os.path.join(app.root_path, 'flaskr.db'),
 # DEBUG=True,
 SECRET_KEY='development key'
-USERNAME=u'admin'
-PASSWORD=u'default'
+USERNAME=u'linengxing'
+PASSWORD=u'TYXR736'
 
 app = Flask(__name__)  
 app.config.from_object(__name__)
-app.debug=True
 
 @app.before_request
 def make_session_permanent():
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=1)
+    app.permanent_session_lifetime = timedelta(minutes=60)
  
 @app.route('/login', methods=['GET', 'POST'])  
 def login():  
