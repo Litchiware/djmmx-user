@@ -22,11 +22,11 @@ $(document).ready(function(){
   $(".update-credit").click(function() {
     $("div.js-menu-screen.menu-screen").addClass("is-visible");
     $(".dialog").addClass("is-visible");
-    $(".dialog label").text($(this).text());
+    $(".dialog input[type=submit]").val($(this).text());
     $(".dialog input[type=text]").val('');
-    var td$ = $(this).parent();
-    var offset = td$.offset();
-    offset.left = offset.left + td$.width();
+    var last_link$ = $(this).parent().children(":last");
+    var offset = last_link$.offset();
+    offset.left = offset.left + $(this).width();
     var wx_id = $(this).parents("tr").children("td").eq(1).text();
     $(".dialog").offset(offset)
       .data({'wx_id': wx_id, 'is_positive': $(this).text() == "增加"});
