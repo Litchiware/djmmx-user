@@ -1,5 +1,6 @@
 #-*- coding: UTF-8 -*- 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from datetime import timedelta
 import re
 import MySQLdb
 import sys
@@ -37,6 +38,11 @@ PASSWORD=u'default'
 app = Flask(__name__)  
 app.config.from_object(__name__)
 app.debug=True
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=1)
  
 @app.route('/login', methods=['GET', 'POST'])  
 def login():  
@@ -72,7 +78,7 @@ def logout():
 @app.route('/add', methods=['POST', 'GET'])
 def add_user():
     if not session.get('logged_in'):
-        abort(401)
+        return redirect(url_for('login'))
     error = None
     if request.method == 'POST':
         wx_id = request.form['wx_id']
@@ -104,6 +110,9 @@ def add_user():
 
 @app.route('/update/<wx_id>', methods=['POST', 'GET'])
 def update_user(wx_id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    error = None
     if request.method == 'POST':
         if request.form.get('wx_discount') == u'auto':
             db = get_db()

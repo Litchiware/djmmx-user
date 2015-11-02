@@ -91,9 +91,10 @@
 .find-users input[type=text]:focus{
   outline : none;
 }
+.table-title {
+  text-align: center;
+}
 .table-title a{
-  display: block;
-  margin: auto;
   text-align: center;
   font-size: 20px;
 }
