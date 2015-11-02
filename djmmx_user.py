@@ -129,7 +129,7 @@ def update_user(wx_id):
             operator = '+' if request.form['is_positive'] == u'true' else '-'
             db = get_db()
             cursor = db.cursor()
-            cursor.execute("update users set credit=credit%s%d where wx_id=('%s')" %(operator, int(operand), wx_id.decode('utf-8')))
+            cursor.execute("update users set credit=greatest(credit%s%d, 0) where wx_id=('%s')" %(operator, int(operand), wx_id.decode('utf-8')))
             db.commit()
             flash(u'积分已更新！')
             return redirect(url_for('show_users'))
