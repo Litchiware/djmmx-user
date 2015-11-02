@@ -5,9 +5,9 @@
     <h1>添加用户</h1>
     <form action="{{ url_for('add_user') }}" method="post">
       <dl>
-        <dd><input type="text" name="name" value="姓名" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '姓名';}">
-        <dd><input type="text" name="wx_id" value="微信号" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '微信号';}" >
-        <dd><input type="text" name="phone_number" value="手机号" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '手机号';}">
+        <dd><input type="text" name="name" value="姓名" autocomplete="off" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '姓名';}">
+        <dd><input type="text" name="wx_id" value="微信号" autocomplete="off" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '微信号';}" >
+        <dd><input type="text" name="phone_number" value="手机号" autocomplete="off" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '手机号';}">
         <dd><input type="submit" value="添加">
         <a href="{{ url_for('show_users') }}">返回</a>
       </dl>
