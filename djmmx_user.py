@@ -31,8 +31,6 @@ def get_db():
 
 def error_msg(e, form):
     if e[0] == 1062:
-        if 'wx_id' in e[1]:
-            return u'已存在微信号为%s的用户！' %form['wx_id']
         return u'已存在手机号为%s的用户！' %form['phone_number']
     return u'数据库错误！'
   
@@ -70,7 +68,7 @@ def show_users():
         return redirect(url_for('login'))
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('select wx_id, name, wx_discount, credit, phone_number from users order by id desc')
+    cursor.execute('select name, wx_discount, credit, phone_number from users order by id desc')
     users = cursor.fetchall()
     return render_template('show_users.html', users=users)
 
@@ -87,20 +85,14 @@ def add_user():
         return redirect(url_for('login'))
     error = None
     if request.method == 'POST':
-        wx_id = request.form['wx_id']
         username = request.form['name']
         phone_number = request.form['phone_number']
-        wx_id_patt = re.compile(r'^[0-9a-zA-Z_-]+$')
         username_patt = re.compile(ur"(^[\u4e00-\u9fa5]{2,}$)")
         phone_number_patt = re.compile(ur"^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$")
-        if wx_id == u'微信号':
-            error = u'请输入微信号！'
-        elif username == u'姓名':
+        if username == u'姓名':
             error = u'请输入客户姓名！'
         elif phone_number == u'手机号':
             error = u'请输入客户手机号！'
-        elif not wx_id_patt.match(wx_id):
-            error = u'微信号格式非法！'
         elif not username_patt.match(username):
             error = u'姓名必须为汉字！'
         elif not phone_number_patt.match(phone_number):
@@ -109,7 +101,7 @@ def add_user():
             db = get_db()
             cursor = db.cursor()
             try:
-                cursor.execute("insert into users(wx_id, name, phone_number) values ('%s', '%s', '%s')" %(request.form['wx_id'].encode('utf-8'), request.form['name'].encode('utf-8'), request.form['phone_number'].encode('utf-8')))
+                cursor.execute("insert into users(name, phone_number) values ('%s', '%s')" %(request.form['name'].encode('utf-8'), request.form['phone_number'].encode('utf-8')))
                 db.commit()
                 flash(u'用户添加成功！')
                 return redirect(url_for('show_users'))
@@ -122,8 +114,8 @@ def add_user():
 
     return render_template('add_user.html', error=error)
 
-@app.route('/update/<wx_id>', methods=['POST', 'GET'])
-def update_user(wx_id):
+@app.route('/update/<phone_number>', methods=['POST', 'GET'])
+def update_user(phone_number):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     error = None
@@ -131,7 +123,7 @@ def update_user(wx_id):
         if request.form.get('wx_discount') == u'auto':
             db = get_db()
             cursor = db.cursor()
-            cursor.execute("update users set wx_discount=mod(wx_discount+1,2) where wx_id=('%s')" %(wx_id.decode('utf-8')))
+            cursor.execute("update users set wx_discount=mod(wx_discount+1,2) where phone_number=('%s')" %(phone_number.decode('utf-8')))
             db.commit()
             flash(u'优惠信息已更新！')
             return redirect(url_for('show_users'))
@@ -144,7 +136,7 @@ def update_user(wx_id):
             operator = '+' if request.form['is_positive'] == u'true' else '-'
             db = get_db()
             cursor = db.cursor()
-            cursor.execute("update users set credit=greatest(credit%s%d, 0) where wx_id=('%s')" %(operator, int(operand), wx_id.decode('utf-8')))
+            cursor.execute("update users set credit=greatest(credit%s%d, 0) where phone_number=('%s')" %(operator, int(operand), phone_number.decode('utf-8')))
             db.commit()
             flash(u'积分已更新！')
             return redirect(url_for('show_users'))

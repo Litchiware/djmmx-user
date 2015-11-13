@@ -15,9 +15,9 @@ $(document).ready(function(){
     $('.dialog').removeClass('is-visible');
   });
   $(".toggle-wx-discount").click(function(){
-    var wx_id = $(this).parents("tr").children("td").eq(1).text();
+    var phone_number = $(this).parents("tr").children("td").eq(1).text();
     $(".hidden-form input[name='wx_discount']").attr('value', 'auto');
-    $(".hidden-form form").attr("action", "/update/" + wx_id).submit();
+    $(".hidden-form form").attr("action", "/update/" + phone_number).submit();
   });
   $(".update-credit").click(function() {
     $("div.js-menu-screen.menu-screen").addClass("is-visible");
@@ -27,12 +27,12 @@ $(document).ready(function(){
     var last_link$ = $(this).parent().children(":last");
     var offset = last_link$.offset();
     offset.left = offset.left + $(this).width();
-    var wx_id = $(this).parents("tr").children("td").eq(1).text();
+    var phone_number = $(this).parents("tr").children("td").eq(1).text();
     $(".dialog").offset(offset)
-      .data({'wx_id': wx_id, 'is_positive': $(this).text() == "增加"});
+      .data({'phone_number': phone_number, 'is_positive': $(this).text() == "增加"});
   });
   $(".dialog form").submit(function(e){
-    $(this).attr("action", "/update/" + $(".dialog").data('wx_id'));
+    $(this).attr("action", "/update/" + $(".dialog").data('phone_number'));
     $(".dialog input[name='is_positive']").attr('value', $(".dialog").data('is_positive'));
     return true;
   });
