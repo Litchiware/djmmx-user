@@ -15,25 +15,32 @@ $(document).ready(function(){
     $('.dialog').removeClass('is-visible');
   });
   $(".toggle-wx-discount").click(function(){
-    var phone_number = $(this).parents("tr").children("td").eq(1).text();
+    var phone_number = $(this).parents("tr").children("td").eq(1).text().substring(0, 11);
     $(".hidden-form input[name='wx_discount']").attr('value', 'auto');
     $(".hidden-form form").attr("action", "/update/" + phone_number).submit();
   });
-  $(".update-credit").click(function() {
+  $("a[class^='update-']").click(function() {
+    form_div$ = $("#" + $(this).attr('class')+'-form')
     $("div.js-menu-screen.menu-screen").addClass("is-visible");
-    $(".dialog").addClass("is-visible");
-    $(".dialog input[type=submit]").val($(this).text());
-    $(".dialog input[type=text]").val('');
+    form_div$.addClass("is-visible");
+    if (form_div$.attr('id') == 'update-credit-form'){
+      form_div$.children("input[type=submit]").val($(this).text());
+      form_div$.data({'is_positive': $(this).text() == "增加"});
+    }
+    form_div$.children("input[type=text]").val('');
     var last_link$ = $(this).parent().children(":last");
     var offset = last_link$.offset();
     offset.left = offset.left + $(this).width();
-    var phone_number = $(this).parents("tr").children("td").eq(1).text();
-    $(".dialog").offset(offset)
-      .data({'phone_number': phone_number, 'is_positive': $(this).text() == "增加"});
+    form_div$.offset(offset)
+    var phone_number = $(this).parents("tr").children("td").eq(1).text().substring(0, 11);
+    form_div$.data({'phone_number': phone_number});
   });
   $(".dialog form").submit(function(e){
-    $(this).attr("action", "/update/" + $(".dialog").data('phone_number'));
-    $(".dialog input[name='is_positive']").attr('value', $(".dialog").data('is_positive'));
+    phone_number = $(this).parent().data('phone_number')
+    $(this).attr("action", "/update/" + phone_number);
+    if ($(this).parent().attr('id') == 'update-credit-form'){
+      $(this).children("input[name='is_positive']").attr('value', $(this).parent().data('is_positive'));
+    }
     return true;
   });
 });

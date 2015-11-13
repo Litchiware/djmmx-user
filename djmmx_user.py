@@ -29,9 +29,9 @@ def get_db():
         g.db = connect_db()
     return g.db
 
-def error_msg(e, form):
+def error_msg(e, phone_number, username):
     if e[0] == 1062:
-        return u'已存在手机号为%s的用户！' %form['phone_number']
+        return u'已存在手机号为%s的用户：%s' %(phone_number, username)
     return u'数据库错误！'
   
 # DATABASE=os.path.join(app.root_path, 'flaskr.db'),
@@ -94,7 +94,7 @@ def add_user():
         elif phone_number == u'手机号':
             error = u'请输入客户手机号！'
         elif not username_patt.match(username):
-            error = u'姓名必须为汉字！'
+            error = u'姓名必须为2个以上汉字！'
         elif not phone_number_patt.match(phone_number):
             error = u'手机号码格式非法！'
         else:
@@ -107,7 +107,9 @@ def add_user():
                 return redirect(url_for('show_users'))
             except MySQLdb.Error as e:
                 db.rollback()
-                error = error_msg(e, request.form)
+                cursor.execute("select name from users where phone_number=('%s')" %(phone_number.decode('utf-8')))
+                user = cursor.fetchall()
+                error = error_msg(e, phone_number, user[0][0])
             finally:
                 cursor.close()
                 db.close()
@@ -140,6 +142,37 @@ def update_user(phone_number):
             db.commit()
             flash(u'积分已更新！')
             return redirect(url_for('show_users'))
+        if 'name' in request.form:
+            username_patt = re.compile(ur"(^[\u4e00-\u9fa5]{2,}$)")
+            if not username_patt.match(request.form['name']):
+                flash(u'姓名必须为2个以上汉字！')
+                return redirect(url_for('show_users'))
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute("update users set name='%s' where phone_number=('%s')" %(request.form['name'].encode('utf-8'), phone_number.decode('utf-8')))
+            db.commit()
+            flash(u'姓名已更新！')
+            return redirect(url_for('show_users'))
+        if 'phone_number' in request.form:
+            phone_number_patt = re.compile(ur"^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$")
+            if not phone_number_patt.match(request.form['phone_number']):
+                flash(u'手机号码格式非法！')
+                return redirect(url_for('show_users'))
+            db = get_db()
+            cursor = db.cursor()
+            try:
+                cursor.execute("update users set phone_number='%s' where phone_number=('%s')" %(request.form['phone_number'].encode('utf-8'), phone_number.decode('utf-8')))
+                db.commit()
+                flash(u'手机号已更新！')
+            except MySQLdb.Error as e:
+                db.rollback()
+                cursor.execute("select name from users where phone_number=('%s')" %(phone_number.decode('utf-8')))
+                user = cursor.fetchall()
+                flash(error_msg(e, phone_number, user[0][0]))
+            finally:
+                cursor.close()
+                db.close()
+                return redirect(url_for('show_users'))
 
     abort(401)
 

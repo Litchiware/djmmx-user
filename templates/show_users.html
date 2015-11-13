@@ -19,8 +19,12 @@
     <tbody class="table-hover">
       {% for user in users %}
       <tr>
-        <td class="narrow-space">{{ user[0].decode('utf-8') }}</td>
-        <td class="narrow-space">{{ user[3].decode('utf-8') }}</td>
+        <td class="narrow-space">{{ user[0].decode('utf-8') }}
+          <a href="#" class="update-name">修改</a>
+        </td>
+        <td class="narrow-space">{{ user[3].decode('utf-8') }}
+          <a href="#" class="update-phone-number">修改</a>
+        </td>
         <td class="narrow-space">{{ '已用' if user[1]==0 else '可用' }}
           {% if user[1] ==1 %}
           <a href="#" class="toggle-wx-discount">使用</a>
@@ -34,11 +38,23 @@
   <div class="hidden-form">
     <form method="post"><input type='text' name="wx_discount"></form>
   </div>
-  <div class="dialog">
+  <div class="dialog" id="update-credit-form">
     <form method="post">
     <input type="submit" value="确定">
     <input type="text" name="delt_credit" autocomplete="off">
     <input type="hidden" name="is_positive">
+    </form>
+  </div>
+  <div class="dialog" id="update-name-form">
+    <form method="post">
+    <input type="submit" value="确定">
+    <input type="text" name="name" autocomplete="off">
+    </form>
+  </div>
+  <div class="dialog" id="update-phone-number-form">
+    <form method="post">
+    <input type="submit" value="确定">
+    <input type="text" name="phone_number" autocomplete="off">
     </form>
   </div>
   <a href="{{ url_for('add_user') }}" class="a-button">新增客户</a>
