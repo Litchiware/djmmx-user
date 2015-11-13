@@ -166,7 +166,7 @@ def update_user(phone_number):
                 flash(u'手机号已更新！')
             except MySQLdb.Error as e:
                 db.rollback()
-                cursor.execute("select name from users where phone_number=('%s')" %(phone_number.decode('utf-8')))
+                cursor.execute("select name from users where phone_number=('%s')" %(request.form['phone_number'].decode('utf-8')))
                 user = cursor.fetchall()
                 flash(error_msg(e, phone_number, user[0][0]))
             finally:
