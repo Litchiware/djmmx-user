@@ -28,6 +28,13 @@ def get_db():
     if not hasattr(g, 'db'):
         g.db = connect_db()
     return g.db
+
+def error_msg(e, form):
+    if e[0] == 1062:
+        if 'wx_id' in e[1]:
+            return u'已存在微信号为%s的用户！' %form['wx_id']
+        return u'已存在手机号为%s的用户！' %form['phone_number']
+    return u'数据库错误！'
   
 # DATABASE=os.path.join(app.root_path, 'flaskr.db'),
 # DEBUG=True,
@@ -101,10 +108,18 @@ def add_user():
         else:
             db = get_db()
             cursor = db.cursor()
-            cursor.execute("insert into users(wx_id, name, phone_number) values ('%s', '%s', '%s')" %(request.form['wx_id'].encode('utf-8'), request.form['name'].encode('utf-8'), request.form['phone_number'].encode('utf-8')))
-            db.commit()
-            flash(u'用户添加成功！')
-            return redirect(url_for('show_users'))
+            try:
+                cursor.execute("insert into users(wx_id, name, phone_number) values ('%s', '%s', '%s')" %(request.form['wx_id'].encode('utf-8'), request.form['name'].encode('utf-8'), request.form['phone_number'].encode('utf-8')))
+                db.commit()
+                flash(u'用户添加成功！')
+                return redirect(url_for('show_users'))
+            except MySQLdb.Error as e:
+                db.rollback()
+                error = error_msg(e, request.form)
+            finally:
+                cursor.close()
+                db.close()
+
     return render_template('add_user.html', error=error)
 
 @app.route('/update/<wx_id>', methods=['POST', 'GET'])
